@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Checkout</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      .section {
+        margin-bottom: 25px;
+      }
+
+      .section h3 {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      textarea {
+        height: 80px;
+        resize: none;
+      }
+
+      .payment label {
+        display: block;
+        margin: 6px 0;
+        font-size: 15px;
+      }
+
+      .summary {
+        background: #fafafa;
+        padding: 15px;
+        border-radius: 6px;
+      }
+
+      .summary p {
+        margin: 6px 0;
+      }
+
+      .total {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        background: #088178;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background: #06665f;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Checkout</h2>
+
+      <form id="checkout-form">
+        <div class="section">
+          <h3>Customer Details</h3>
+
+          <input type="text" id="name" placeholder="Full Name" required />
+
+          <input type="email" id="email" placeholder="Email Address" required />
+
+          <input type="tel" id="phone" placeholder="Phone Number" required />
+
+          <textarea id="address" placeholder="Full Address" required></textarea>
+
+          <input type="text" id="city" placeholder="City" required />
+
+          <input type="text" id="pincode" placeholder="Pincode" required />
+
+          <textarea id="note" placeholder="Order Notes (Optional)"></textarea>
+        </div>
+
+        <div class="section">
+          <h3>Payment Method</h3>
+
+          <div class="payment">
+            <label>
+              <input type="radio" name="payment" value="COD" checked />
+              Cash on Delivery
+            </label>
+
+            <label>
+              <input type="radio" name="payment" value="UPI" />
+              UPI
+            </label>
+
+            <label>
+              <input type="radio" name="payment" value="Card" />
+              Debit / Credit Card
+            </label>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Order Summary</h3>
+
+          <div class="summary">
+            <div id="order-summary"></div>
+
+            <div class="total" id="total"></div>
+          </div>
+        </div>
+
+        <button type="submit">Place Order</button>
+      </form>
+    </div>
+
+    <script>
+      /* LOAD CART */
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const summaryDiv = document.getElementById("order-summary");
+
+      const totalDiv = document.getElementById("total");
+
+      let total = 0;
+
+      /* DISPLAY CART */
+
+      if (cart.length === 0) {
+        summaryDiv.innerHTML = "<p>Your cart is empty</p>";
+      } else {
+        cart.forEach((item) => {
+          let qty = item.qty || item.quantity || 1;
+
+          let itemTotal = item.price * qty;
+
+          total += itemTotal;
+
+          summaryDiv.innerHTML += `<p>${item.name} — ₹${item.price} × ${qty} = ₹${itemTotal}</p>`;
+        });
+      }
+
+      totalDiv.innerText = "Total: ₹" + total;
+
+      /* PLACE ORDER */
+
+      document
+        .getElementById("checkout-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          if (cart.length === 0) {
+            alert("Cart is empty");
+            return;
+          }
+
+          const payment = document.querySelector(
+            'input[name="payment"]:checked',
+          ).value;
+
+          const order = {
+            orderId: "ORD" + Date.now(),
+
+            name: document.getElementById("name").value,
+
+            email: document.getElementById("email").value,
+
+            phone: document.getElementById("phone").value,
+
+            address: document.getElementById("address").value,
+
+            city: document.getElementById("city").value,
+
+            pincode: document.getElementById("pincode").value,
+
+            note: document.getElementById("note").value,
+
+            payment: payment,
+
+            items: cart,
+
+            total: total,
+
+            status: "Pending",
+
+            date: new Date().toLocaleString(),
+          };
+
+          /* SAVE ORDER */
+
+          let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+          orders.push(order);
+
+          localStorage.setItem("orders", JSON.stringify(orders));
+
+          localStorage.setItem("lastOrder", JSON.stringify(order));
+
+          /* SAVE CUSTOMER */
+
+          let customers = JSON.parse(localStorage.getItem("customers")) || [];
+
+          if (!customers.find((c) => c.phone === order.phone)) {
+            customers.push({
+              name: order.name,
+              phone: order.phone,
+              email: order.email,
+            });
+
+            localStorage.setItem("customers", JSON.stringify(customers));
+          }
+
+          /* CLEAR CART */
+
+          localStorage.removeItem("cart");
+
+          /* REDIRECT */
+
+          window.location.href = "success.html";
+        });
+    </script>
+
+    <script></script>
+  </body>
+</html>

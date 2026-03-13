@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Order Success</title>
+
+    <style>
+      body {
+        font-family: Arial;
+        background: #f4f6f9;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: 60px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #28a745;
+      }
+
+      .details {
+        text-align: left;
+        margin-top: 20px;
+        background: #fafafa;
+        padding: 20px;
+        border-radius: 6px;
+      }
+
+      button {
+        padding: 12px 20px;
+        margin-top: 20px;
+        background: #088178;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background: #06665f;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>🎉 Order Placed Successfully</h2>
+
+      <p>Your order has been confirmed.</p>
+
+      <div class="details" id="details"></div>
+
+      <a href="shop.html">
+        <button>Continue Shopping</button>
+      </a>
+    </div>
+
+    <script>
+      const order = JSON.parse(localStorage.getItem("lastOrder"));
+
+      const div = document.getElementById("details");
+
+      if (order) {
+        let itemsHTML = "";
+
+        order.items.forEach((item) => {
+          let qty = item.qty || item.quantity || 1;
+
+          itemsHTML += `<p>${item.name} — ₹${item.price} × ${qty}</p>`;
+        });
+
+        div.innerHTML = `
+
+<p><b>Order ID:</b> ${order.orderId}</p>
+
+<p><b>Name:</b> ${order.name}</p>
+
+<p><b>Email:</b> ${order.email}</p>
+
+<p><b>Phone:</b> ${order.phone}</p>
+
+<p><b>Address:</b> ${order.address}, ${order.city} - ${order.pincode}</p>
+
+<p><b>Payment Method:</b> ${order.payment}</p>
+
+<h3>Items</h3>
+
+${itemsHTML}
+
+<h3>Total: ₹${order.total}</h3>
+
+<p><b>Date:</b> ${order.date}</p>
+
+`;
+      } else {
+        div.innerHTML = "<p>No order found.</p>";
+      }
+    </script>
+
+    <script>
+      const order = JSON.parse(localStorage.getItem("lastOrder"));
+
+      const div = document.getElementById("details");
+
+      if (order) {
+        let itemsHTML = "";
+
+        order.items.forEach((item) => {
+          let qty = item.qty || item.quantity || 1;
+
+          itemsHTML += `
+<p>
+<img src="${item.image}" width="40">
+${item.name} — ₹${item.price} × ${qty}
+</p>
+`;
+        });
+
+        div.innerHTML = `
+
+<p><b>Order ID:</b> ${order.orderId}</p>
+
+<p><b>Name:</b> ${order.name}</p>
+
+<p><b>Email:</b> ${order.email}</p>
+
+<p><b>Phone:</b> ${order.phone}</p>
+
+<p><b>Address:</b> ${order.address}, ${order.city} - ${order.pincode}</p>
+
+<p><b>Payment:</b> ${order.payment}</p>
+
+<h3>Items</h3>
+
+${itemsHTML}
+
+<h3>Total: ₹${order.total}</h3>
+
+<p><b>Date:</b> ${order.date}</p>
+
+`;
+      } else {
+        div.innerHTML = "No order found";
+      }
+    </script>
+
+    <script>
+      const order = JSON.parse(localStorage.getItem("lastOrder"));
+
+      const div = document.getElementById("details");
+
+      if (order) {
+        let itemsHTML = "";
+
+        order.items.forEach((item) => {
+          let qty = item.qty || item.quantity || 1;
+
+          itemsHTML += `
+<p>
+<img src="${item.image}" width="40">
+${item.name} — ₹${item.price} × ${qty}
+</p>
+`;
+        });
+
+        div.innerHTML = `
+
+<p><b>Order ID:</b> ${order.orderId}</p>
+
+<p><b>Name:</b> ${order.name}</p>
+
+<p><b>Email:</b> ${order.email}</p>
+
+<p><b>Phone:</b> ${order.phone}</p>
+
+<p><b>Address:</b> ${order.address}, ${order.city} - ${order.pincode}</p>
+
+<p><b>Payment:</b> ${order.payment}</p>
+
+<h3>Items</h3>
+
+${itemsHTML}
+
+<h3>Total: ₹${order.total}</h3>
+
+<p><b>Date:</b> ${order.date}</p>
+
+`;
+      } else {
+        div.innerHTML = "No order found";
+      }
+    </script>
+  </body>
+</html>

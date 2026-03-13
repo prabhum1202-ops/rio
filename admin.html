@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Ecommerce Admin</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        background: #f1f3f6;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: 240px;
+        background: #0f172a;
+        color: white;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      .sidebar h2 {
+        margin-bottom: 30px;
+      }
+
+      .sidebar button {
+        width: 100%;
+        margin: 8px 0;
+        padding: 12px;
+        background: #088178;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+
+      .sidebar button:hover {
+        background: #06665f;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .card {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      input,
+      select {
+        padding: 10px;
+        margin: 6px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      button.action {
+        padding: 8px 12px;
+        border: none;
+        background: #088178;
+        color: white;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+
+      th {
+        background: #088178;
+        color: white;
+      }
+
+      img {
+        width: 50px;
+      }
+
+      .stats {
+        display: flex;
+        gap: 20px;
+      }
+
+      .stat {
+        flex: 1;
+        background: linear-gradient(135deg, #088178, #0ea5a4);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h2>🛍 Admin</h2>
+
+      <button onclick="showSection('dashboard')">Dashboard</button>
+      <button onclick="showSection('products')">Products</button>
+      <button onclick="showSection('orders')">Orders</button>
+      <button onclick="showSection('users')">Customers</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- LOGIN -->
+      <div id="loginBox" class="card">
+        <h3>Admin Login</h3>
+        <input id="user" placeholder="Username" />
+        <input id="pass" type="password" placeholder="Password" />
+        <br />
+        <button class="action" onclick="login()">Login</button>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div id="dashboard" class="hidden">
+        <div class="stats">
+          <div class="stat">
+            <h2 id="statProducts">0</h2>
+            Products
+          </div>
+          <div class="stat">
+            <h2 id="statOrders">0</h2>
+            Orders
+          </div>
+          <div class="stat">
+            ₹
+            <h2 id="statRevenue">0</h2>
+            Revenue
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div id="products" class="hidden">
+        <div class="card">
+          <h3>Add Product</h3>
+
+          <input id="pname" placeholder="Product Name" />
+          <input id="pprice" type="number" placeholder="Price" />
+          <input id="pstock" type="number" placeholder="Stock" />
+          <input id="pimage" type="file" />
+
+          <button class="action" onclick="addProduct()">Add Product</button>
+        </div>
+
+        <div class="card">
+          <h3>Product List</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+      <!-- ORDERS -->
+      <div id="orders" class="hidden">
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersBox"></div>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div id="users" class="hidden">
+        <div class="card">
+          <h3>Customers</h3>
+          <div id="usersBox"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let products = JSON.parse(localStorage.getItem("products")) || [];
+      let orders = JSON.parse(localStorage.getItem("orders")) || [];
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      /* LOGIN */
+      function login() {
+        if (user.value === "admin" && pass.value === "1234") {
+          loginBox.style.display = "none";
+          showSection("dashboard");
+          loadStats();
+        } else alert("Wrong Login");
+      }
+
+      function logout() {
+        location.reload();
+      }
+
+      /* NAVIGATION */
+      function showSection(id) {
+        document.querySelectorAll(".main > div").forEach((div) => {
+          if (div.id !== "loginBox") div.classList.add("hidden");
+        });
+        document.getElementById(id).classList.remove("hidden");
+      }
+
+      /* STATS */
+      function loadStats() {
+        statProducts.innerText = products.length;
+        statOrders.innerText = orders.length;
+
+        let revenue = 0;
+        orders.forEach((o) => (revenue += o.total || 0));
+        statRevenue.innerText = revenue;
+      }
+
+      /* ADD PRODUCT */
+      function addProduct() {
+        const name = pname.value;
+        const price = pprice.value;
+        const stock = pstock.value;
+        const file = pimage.files[0];
+
+        if (!name || !price || !stock || !file) {
+          alert("Fill all fields");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          products.push({
+            name,
+            price,
+            stock,
+            image: e.target.result,
+          });
+
+          localStorage.setItem("products", JSON.stringify(products));
+          renderProducts();
+          loadStats();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      /* RENDER PRODUCTS */
+      function renderProducts() {
+        productTable.innerHTML = "";
+
+        products.forEach((p, i) => {
+          productTable.innerHTML += `
+      <tr>
+        <td><img src="${p.image}"></td>
+        <td>${p.name}</td>
+        <td>₹${p.price}</td>
+        <td>${p.stock}</td>
+        <td>
+          <button class="action" onclick="deleteProduct(${i})">Delete</button>
+        </td>
+      </tr>`;
+        });
+      }
+      renderProducts();
+
+      /* DELETE PRODUCT */
+      function deleteProduct(i) {
+        if (confirm("Delete product?")) {
+          products.splice(i, 1);
+          localStorage.setItem("products", JSON.stringify(products));
+          renderProducts();
+          loadStats();
+        }
+      }
+
+      /* ORDERS */
+      function renderOrders() {
+        ordersBox.innerHTML = "";
+
+        orders.forEach((o, i) => {
+          ordersBox.innerHTML += `
+      <div style="border:1px solid #ddd;padding:10px;margin:10px;border-radius:8px">
+        <b>Order #${i + 1}</b><br>
+        Total: ₹${o.total}<br>
+        Status:
+        <select onchange="changeStatus(${i},this.value)">
+          <option ${o.status === "Pending" ? "selected" : ""}>Pending</option>
+          <option ${o.status === "Shipped" ? "selected" : ""}>Shipped</option>
+          <option ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
+        </select>
+      </div>`;
+        });
+      }
+      renderOrders();
+
+      function changeStatus(i, status) {
+        orders[i].status = status;
+        localStorage.setItem("orders", JSON.stringify(orders));
+      }
+
+      /* USERS */
+      function renderUsers() {
+        usersBox.innerHTML = "";
+        users.forEach((u) => {
+          usersBox.innerHTML += `<div>${u.name} - ${u.phone}</div>`;
+        });
+      }
+      renderUsers();
+      localStorage.products;
+    </script>
+    <script>
+      let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+      const ordersBox = document.getElementById("ordersBox");
+
+      orders.forEach((o, i) => {
+        let itemsHTML = "";
+
+        o.items.forEach((item) => {
+          itemsHTML += `
+<img src="${item.image}" width="40">
+${item.name} x ${item.qty}
+<br>
+`;
+        });
+
+        ordersBox.innerHTML += `
+
+<div style="border:1px solid #ddd;padding:15px;margin:10px">
+
+<b>Order ID:</b> ${o.orderId}<br>
+
+<b>Name:</b> ${o.name}<br>
+
+<b>Phone:</b> ${o.phone}<br>
+
+<b>Address:</b> ${o.address}<br>
+
+<b>Payment:</b> ${o.payment}<br>
+
+<b>Total:</b> ₹${o.total}<br>
+
+<b>Items:</b><br>
+
+${itemsHTML}
+
+</div>
+
+`;
+      });
+    </script>
+  </body>
+</html>

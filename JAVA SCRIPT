@@ -1,0 +1,503 @@
+const bar = document.getElementById('bar');
+const close = document.getElementById('close');
+const nav = document.getElementById('navbar');
+const container = document.getElementById("product-container");
+const order = JSON.parse(localStorage.getItem("lastOrder"));
+const itemTotal = item.price * (item.qty || 1);
+
+if(bar){
+   bar.addEventListener('click', () => {
+        nav.classList.add('active');
+ })
+}
+
+if(close){
+   close.addEventListener('click', () => {
+        nav.classList.remove('active');
+ })
+}
+
+
+
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Add to cart buttons
+document.querySelectorAll(".add-cart").forEach(button => {
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const product = {
+            name: button.dataset.name,
+            price: parseFloat(button.dataset.price),
+            image: button.dataset.image,
+            qty: 1
+        };
+
+        addToCart(product);
+    });
+});
+
+function addToCart(product) {
+    const existing = cart.find(item => item.name === product.name);
+
+    if (existing) {
+        existing.qty++;
+    } else {
+        cart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Product added to cart ✅");
+}
+
+
+
+const phoneNumber = "6363571091"; // your number
+
+let message = "New Order:%0A";
+
+cart.forEach(item => {
+    message += `${item.name} x ${item.qty} = ₹${item.price * item.qty}%0A`;
+});
+
+message += `%0ATotal: ₹${total}`;
+
+window.open(`https://wa.me/${6363571091}?text=${message}`);
+
+
+const order = JSON.parse(localStorage.getItem("lastOrder"));
+
+
+
+JSON.parse(localStorage.getItem("cart"))
+
+localStorage.getItem("products")
+localStorage.setItem("products", JSON.stringify([
+  { name: "T-Shirt", price: 550, image: "img1.jpg" }
+]));
+localStorage.setItem("lastOrder", JSON.stringify(order));
+window.location.href = "success.html";
+localStorage.getItem("lastOrder")
+localStorage.setItem("lastOrder", JSON.stringify(order));
+window.location.href = "success.html";
+
+
+
+
+/* ================= DATA ================= */
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+/* ================= LOGIN ================= */
+function login(){
+  if(user.value === "admin" && pass.value === "1234"){
+    sessionStorage.setItem("admin","true");
+    loginBox.style.display = "none";
+    showSection('dashboard');
+    loadStats();
+  } else alert("Wrong Login");
+}
+
+if(sessionStorage.getItem("admin")){
+  loginBox.style.display = "none";
+  showSection('dashboard');
+  loadStats();
+}
+
+function logout(){
+  sessionStorage.removeItem("admin");
+  location.reload();
+}
+
+/* ================= NAVIGATION ================= */
+function showSection(id){
+  document.querySelectorAll('.main > div').forEach(div=>{
+    if(div.id !== 'loginBox') div.classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+
+  if(id === "orders") renderOrders();
+  if(id === "users") renderUsers();
+}
+
+/* ================= STATS ================= */
+function loadStats(){
+  statProducts.innerText = products.length;
+  statOrders.innerText = orders.length;
+
+  let revenue = 0;
+  orders.forEach(o=> revenue += Number(o.total) || 0);
+  statRevenue.innerText = revenue;
+}
+
+/* ================= ADD PRODUCT ================= */
+function addProduct(){
+  const name = pname.value;
+  const price = pprice.value;
+  const stock = pstock.value;
+  const file = pimage.files[0];
+
+  if(!name || !price || !stock || !file){
+    alert("Fill all fields");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    products.push({
+      name,
+      price: Number(price),
+      stock: Number(stock),
+      image: e.target.result
+    });
+
+    localStorage.setItem("products", JSON.stringify(products));
+    renderProducts();
+    loadStats();
+    alert("Product Added ✅");
+  }
+  reader.readAsDataURL(file);
+}
+
+/* ================= RENDER PRODUCTS ================= */
+function renderProducts(){
+  productTable.innerHTML = "";
+
+  products.forEach((p,i)=>{
+    productTable.innerHTML += `
+      <tr>
+        <td><img src="${p.image}"></td>
+        <td>${p.name}</td>
+        <td>₹${p.price}</td>
+        <td>${p.stock}</td>
+        <td>
+          <button class="action" onclick="editProduct(${i})">Edit</button>
+          <button class="action" onclick="deleteProduct(${i})">Delete</button>
+        </td>
+      </tr>`;
+  });
+}
+renderProducts();
+
+/* ================= EDIT PRODUCT ================= */
+function editProduct(i){
+  const p = products[i];
+  pname.value = p.name;
+  pprice.value = p.price;
+  pstock.value = p.stock;
+
+  deleteProduct(i);
+}
+
+/* ================= DELETE PRODUCT ================= */
+function deleteProduct(i){
+  if(confirm("Delete product?")){
+    products.splice(i,1);
+    localStorage.setItem("products", JSON.stringify(products));
+    renderProducts();
+    loadStats();
+  }
+}
+
+/* ================= ORDERS ================= */
+function renderOrders(){
+  ordersBox.innerHTML = "";
+
+  if(orders.length === 0){
+    ordersBox.innerHTML = "<p>No orders yet</p>";
+    return;
+  }
+
+  orders.forEach((o,i)=>{
+    let itemsHTML = "";
+   o.items?.forEach(item=>{
+    itemsHTML += `
+    <img src="${item.image}" width="40">
+    ${item.name} x ${item.qty || 1} - ₹${item.price}
+    <br>`;
+  });
+
+    ordersBox.innerHTML += `
+      <div style="border:1px solid #ddd;padding:15px;margin:10px;border-radius:10px">
+        <b>Order ID:</b> ${o.orderId || i+1}<br>
+        <b>Name:</b> ${o.name || "Guest"}<br>
+        <b>Phone:</b> ${o.phone || "-"}<br>
+        <b>Address:</b> ${o.address || "-"}<br>
+        <b>Total:</b> ₹${o.total}<br>
+        <b>Items:</b><br>${itemsHTML}
+
+        <br>Status:
+        <select onchange="changeStatus(${i},this.value)">
+          <option ${o.status==='Pending'?'selected':''}>Pending</option>
+          <option ${o.status==='Shipped'?'selected':''}>Shipped</option>
+          <option ${o.status==='Delivered'?'selected':''}>Delivered</option>
+        </select>
+      </div>`;
+
+    // auto add customers
+    if(o.name && !users.find(u=>u.phone===o.phone)){
+      users.push({name:o.name, phone:o.phone});
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+  });
+}
+
+function changeStatus(i,status){
+  orders[i].status = status;
+  localStorage.setItem("orders", JSON.stringify(orders));
+  renderOrders();
+}
+
+/* ================= USERS ================= */
+function renderUsers(){
+  usersBox.innerHTML = "";
+
+  if(users.length === 0){
+    usersBox.innerHTML = "<p>No customers yet</p>";
+    return;
+  }
+
+  users.forEach(u=>{
+    usersBox.innerHTML += `
+      <div style="padding:8px;border-bottom:1px solid #eee">
+        👤 ${u.name} — ${u.phone}
+      </div>`;
+  });
+}
+
+
+// SELECT ALL CART BUTTONS
+let carts = document.querySelectorAll(".add-cart");
+
+// GET CART FROM STORAGE
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+carts.forEach(button => {
+
+    button.addEventListener("click", function(e){
+
+        e.preventDefault();
+
+        let name = this.dataset.name;
+        let price = this.dataset.price;
+        let image = this.dataset.image;
+
+        let product = {
+            name: name,
+            price: price,
+            image: image,
+            quantity: 1
+        };
+
+        cart.push(product);
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        alert("Product added to cart 🛒");
+    });
+
+});
+
+<input type="number" value="${item.qty || 1}" min="1"
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const summaryDiv = document.getElementById("order-summary");
+const totalDiv = document.getElementById("total");
+
+let total = 0;
+
+if(cart.length === 0){
+
+summaryDiv.innerHTML = "<p>Your cart is empty</p>";
+
+}else{
+
+cart.forEach(item => {
+
+let qty = item.qty || item.quantity || 1;
+let itemTotal = item.price * qty;
+
+total += itemTotal;
+
+summaryDiv.innerHTML += `
+<p>${item.name} — ₹${item.price} × ${qty} = ₹${itemTotal}</p>
+`;
+
+});
+
+}
+localStorage.getItem("orders")
+totalDiv.innerText = "Total: ₹" + total;
+
+
+
+const order = {
+
+orderId: "ORD" + Date.now(),
+
+name: document.getElementById("name").value,
+
+email: document.getElementById("email").value,
+
+phone: document.getElementById("phone").value,
+
+address: document.getElementById("address").value,
+
+city: document.getElementById("city").value,
+
+pincode: document.getElementById("pincode").value,
+
+note: document.getElementById("note").value,
+
+payment: payment,
+
+items: cart,
+
+total: total,
+
+status: "Pending",
+
+date: new Date().toLocaleString()
+
+};
+
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+if(!users.find(u => u.phone === order.phone)){
+
+users.push({
+name: order.name,
+phone: order.phone,
+email: order.email
+});
+
+localStorage.setItem("users", JSON.stringify(users));
+
+}
+
+
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push(order);
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+localStorage.customers
+localStorage.getItem("lastOrder")
+localStorage.orders
+
+
+document.getElementById("checkout-form").addEventListener("submit", function(e){
+
+e.preventDefault();
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+if(cart.length === 0){
+alert("Cart is empty");
+return;
+}
+
+const payment = document.querySelector('input[name="payment"]:checked').value;
+
+let total = 0;
+
+cart.forEach(item=>{
+let qty = item.qty || item.quantity || 1;
+total += item.price * qty;
+});
+
+const order = {
+
+orderId: "ORD" + Date.now(),
+
+name: document.getElementById("name").value,
+email: document.getElementById("email").value,
+phone: document.getElementById("phone").value,
+
+address: document.getElementById("address").value,
+city: document.getElementById("city").value,
+pincode: document.getElementById("pincode").value,
+
+note: document.getElementById("note").value,
+
+payment: payment,
+
+items: cart,
+
+total: total,
+
+status: "Pending",
+
+date: new Date().toLocaleString()
+
+};
+
+/* SAVE ORDER */
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push(order);
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+/* SAVE LAST ORDER */
+
+localStorage.setItem("lastOrder", JSON.stringify(order));
+
+/* CLEAR CART */
+
+localStorage.removeItem("cart");
+
+/* REDIRECT */
+
+window.location.href = "success.html";
+
+});
+ordersBox.innerHTML += `
+
+<div style="border:1px solid #ddd;padding:15px;margin:10px;border-radius:10px">
+
+<b>Order ID:</b> ${o.orderId}<br>
+
+<b>Name:</b> ${o.name}<br>
+
+<b>Phone:</b> ${o.phone}<br>
+
+<b>Address:</b> ${o.address}<br>
+
+<b>Payment:</b> ${o.payment}<br>
+
+<b>Total:</b> ₹${o.total}<br>
+
+<b>Items:</b><br>${itemsHTML}
+
+<br>Status:
+
+<select onchange="changeStatus(${i},this.value)">
+<option ${o.status==='Pending'?'selected':''}>Pending</option>
+<option ${o.status==='Shipped'?'selected':''}>Shipped</option>
+<option ${o.status==='Delivered'?'selected':''}>Delivered</option>
+</select>
+
+</div>
+`;
+const product = {
+
+name: button.dataset.name,
+
+price: parseFloat(button.dataset.price),
+
+image: button.dataset.image,
+
+qty: 1
+
+};
